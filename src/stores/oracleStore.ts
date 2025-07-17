@@ -107,8 +107,17 @@ export const useOracleStore = create<OracleStore>((set, get) => ({
     setPriceResult({ loading: true, error: null });
 
     try {
-      // Mock API call - replace with actual backend endpoint
-      const response = await fetch(`/api/price?token=${formInput.tokenAddress}&network=${formInput.network}&timestamp=${formInput.timestamp}`);
+      const response = await fetch('/api/price', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: formInput.tokenAddress,
+          network: formInput.network,
+          timestamp: parseInt(formInput.timestamp),
+        }),
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch price');
@@ -118,7 +127,7 @@ export const useOracleStore = create<OracleStore>((set, get) => ({
       
       setPriceResult({
         price: data.price,
-        timestamp: data.timestamp,
+        timestamp: formInput.timestamp,
         source: data.source,
         loading: false,
         error: null,
@@ -142,7 +151,6 @@ export const useOracleStore = create<OracleStore>((set, get) => ({
     setHistoryJobProgress({ isRunning: true, progress: 0, error: null });
 
     try {
-      // Mock API call - replace with actual backend endpoint
       const response = await fetch('/api/schedule', {
         method: 'POST',
         headers: {
