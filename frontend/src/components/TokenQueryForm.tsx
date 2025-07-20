@@ -17,19 +17,19 @@ export function TokenQueryForm() {
   const [time, setTime] = useState('12:00');
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (date) {
-      const [hours, minutes] = time.split(':');
-      const timestamp = new Date(date);
-      timestamp.setHours(parseInt(hours), parseInt(minutes));
-      
-      setFormInput({
-        timestamp: Math.floor(timestamp.getTime() / 1000).toString(),
-      });
-    }
-    
+     e.preventDefault();
+
+  if (date) {
+    const [hours, minutes] = time.split(':');
+    const timestamp = new Date(date);
+    timestamp.setHours(parseInt(hours), parseInt(minutes));
+
+    setFormInput({
+      timestamp: Math.floor(timestamp.getTime() / 1000).toString(),
+    });
+
     fetchPrice();
+  }
   };
 
   const isValidEthereumAddress = (address: string) => {

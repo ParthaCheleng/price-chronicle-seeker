@@ -60,8 +60,8 @@ export function PriceDisplay() {
     );
   }
 
-  const sourceInfo = sourceConfig[priceResult.source];
-  const SourceIcon = sourceInfo.icon;
+  const sourceInfo = priceResult.source ? sourceConfig[priceResult.source] : null;
+  const SourceIcon = sourceInfo?.icon;
 
   return (
     <Card className="glass-card glow-border">
@@ -70,7 +70,7 @@ export function PriceDisplay() {
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
             Price Result
           </CardTitle>
-          {priceResult.price && (
+          {priceResult.price && SourceIcon && sourceInfo && (
             <Badge className={cn("price-badge", sourceInfo.className)}>
               <SourceIcon className="w-3 h-3 mr-1" />
               {sourceInfo.label}
@@ -81,7 +81,7 @@ export function PriceDisplay() {
           Historical token price data
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         {priceResult.loading ? (
           <div className="flex items-center justify-center py-8">
@@ -107,23 +107,27 @@ export function PriceDisplay() {
             </div>
 
             {/* Timestamp */}
-            <div className="flex items-center justify-center gap-2 p-4 bg-muted/30 rounded-lg">
-              <Clock className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium">
-                {format(new Date(parseInt(priceResult.timestamp) * 1000), 'PPpp')}
-              </span>
-            </div>
+            {priceResult.timestamp && (
+              <div className="flex items-center justify-center gap-2 p-4 bg-muted/30 rounded-lg">
+                <Clock className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium">
+                  {format(new Date(parseInt(priceResult.timestamp) * 1000), 'PPpp')}
+                </span>
+              </div>
+            )}
 
             {/* Source Information */}
-            <div className="p-4 bg-muted/20 rounded-lg border border-border/50">
-              <div className="flex items-center gap-3 mb-2">
-                <SourceIcon className="w-5 h-5 text-primary" />
-                <span className="font-medium">Data Source</span>
+            {sourceInfo && (
+              <div className="p-4 bg-muted/20 rounded-lg border border-border/50">
+                <div className="flex items-center gap-3 mb-2">
+                  <SourceIcon className="w-5 h-5 text-primary" />
+                  <span className="font-medium">Data Source</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {sourceInfo.description}
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                {sourceInfo.description}
-              </p>
-            </div>
+            )}
           </>
         ) : null}
       </CardContent>
